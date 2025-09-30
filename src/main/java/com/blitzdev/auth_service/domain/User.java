@@ -14,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity {
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 250)
     private String name;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -32,6 +32,6 @@ public class User extends BaseEntity {
     @Column(name = "enabled", columnDefinition = "int default 1")
     private int enabledInd;
 
-    @Column(name = "password_delta")
-    private int passwordDeltaInd;
+    @Column(name = "delta_password")
+    private int deltaPasswordInd;
 }
