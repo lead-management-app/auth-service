@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.security.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Setter
@@ -18,18 +19,18 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Column(length = 36, columnDefinition = "uuid", updatable = false, nullable = false)
+    @Column(length = 36, columnDefinition =  "uuid", updatable = false, nullable = false)
     private UUID id;
 
     @Version
     private Long version;
 
     @Column(updatable = false)
-    private Timestamp signUpDate;
+    private LocalDateTime signUpDate;
 
-    @Column(name = "last_mod_by", nullable = false)
+    @Column(name = "last_mod_by")
     private UUID lastModBy;
 
-    @Column(name = "last_mod_date", nullable = false)
-    private UUID lastModDate;
+    @Column(name = "last_mod_date")
+    private LocalDateTime lastModDate;
 }

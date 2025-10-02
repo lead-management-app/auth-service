@@ -1,15 +1,14 @@
-package com.blitzdev.auth_service.model;
+package com.blitzdev.auth_service.dtos;
 
-import com.blitzdev.auth_service.domain.UserRole;
 import lombok.*;
-
-import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class UserDto extends BaseDto {
 
     private String name;

@@ -1,7 +1,7 @@
 package com.blitzdev.auth_service.mapper;
 
 import com.blitzdev.auth_service.domain.User;
-import com.blitzdev.auth_service.model.UserDto;
+import com.blitzdev.auth_service.dtos.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

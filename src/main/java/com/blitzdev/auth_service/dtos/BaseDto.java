@@ -1,4 +1,4 @@
-package com.blitzdev.auth_service.model;
+package com.blitzdev.auth_service.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
