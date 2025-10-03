@@ -1,13 +1,17 @@
 package com.blitzdev.auth_service.services;
 
 import com.blitzdev.auth_service.domain.User;
+import com.blitzdev.auth_service.domain.UserRole;
 import com.blitzdev.auth_service.dtos.LoginUserDto;
 import com.blitzdev.auth_service.dtos.RegisterUserDto;
+import com.blitzdev.auth_service.dtos.UserDto;
+import com.blitzdev.auth_service.mapper.UserMapper;
 import com.blitzdev.auth_service.repo.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,9 +29,21 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final EmailService emailService;
+    private final UserMapper userMapper;
     private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
-    private Optional<User> signUp(RegisterUserDto dto, String path) {
+    @Value("${confirmation.base-url}")
+    private String baseUrl;
+
+    public Optional<UserDto> signUp(RegisterUserDto dto, String path) throws Exception {
+
+        // does user with this email exist?
+        Optional<User> existingUser = userRepo.findByEmail(dto.getEmail());
+        if (existingUser.isPresent()) {
+            throw new Exception("User with this email already exists");
+        }
+
+        // proceed to saving
         User user = User.builder()
                 .name(dto.getName())
                 .email(dto.getEmail())
@@ -35,13 +51,18 @@ public class AuthenticationService {
                 .confirmationCode(generateConfirmationCode())
                 .confirmationCodeExpiration(LocalDateTime.now().plusMinutes(15))
                 .enabledInd(0)
+                .userRole(UserRole.USER)
                 .build();
-
         user.setSignUpDate(LocalDateTime.now());
         user.setLastModDate(LocalDateTime.now());
 
-        sendConfirmationMail(user, path);
-        return Optional.of(userRepo.save(user));
+        var savedUser = userRepo.save(user);
+        if (savedUser != null) {
+            sendConfirmationMail(savedUser, path);
+        } else {
+            throw new Exception("User could not be created.");
+        };
+        return Optional.of(userMapper.userToUserDto(savedUser));
     }
 
     public Optional<?> authenticate(LoginUserDto dto) {
@@ -106,10 +127,8 @@ public class AuthenticationService {
 
     public void sendConfirmationMail(User user, String baseUrl) {
         String subject = "Account Confirmation";
-        String confirmationLink = getConfirmationLink(baseUrl);
-
         try {
-            emailService.sendConfirmationMail(user.getEmail(), subject, getMessage(confirmationLink));
+            emailService.sendConfirmationMail(user.getEmail(), subject, getMessage(getConfirmationLink()));
         } catch (MessagingException e) {
             log.error("Confirmation email could not be sent: {}", e.getMessage());
         }
@@ -120,9 +139,9 @@ public class AuthenticationService {
         return String.valueOf(random.nextInt(900000) + 100000); // 6 digits code
     }
 
-    private String getConfirmationLink(String baseUrl) {
+    private String getConfirmationLink() {
         String code = generateConfirmationCode();
-         return baseUrl + "/auth/verify?token=" + code;
+         return this.baseUrl + "/verify/" + code;
     }
 
     private String getMessage(String confirmationLink) {

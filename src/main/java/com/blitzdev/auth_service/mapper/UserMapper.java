@@ -5,7 +5,7 @@ import com.blitzdev.auth_service.dtos.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(uses = DateMapper.class)
+@Mapper(componentModel = "spring", uses = DateMapper.class)
 public interface UserMapper {
 
     @Mapping(target = "role", expression = "java(user.getUserRole().name())")
