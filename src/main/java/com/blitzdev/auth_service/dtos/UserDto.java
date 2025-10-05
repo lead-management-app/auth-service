@@ -2,14 +2,17 @@ package com.blitzdev.auth_service.dtos;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class UserDto extends BaseDto {
+public class UserDto {
+
+    private UUID id;
 
     private String name;
 
@@ -26,4 +29,5 @@ public class UserDto extends BaseDto {
     private boolean isChangePassword() {
         return this.deltaPasswordInd == 1;
     }
+
 }

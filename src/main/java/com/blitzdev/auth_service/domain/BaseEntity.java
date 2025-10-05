@@ -17,11 +17,6 @@ import java.util.UUID;
 @MappedSuperclass
 public class BaseEntity {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @Column(length = 36, columnDefinition =  "uuid", updatable = false, nullable = false)
-    private UUID id;
-
     @Version
     private Long version;
 

@@ -20,6 +20,11 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity implements UserDetails {
 
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @Column(length = 36, columnDefinition =  "uuid", updatable = false, nullable = false)
+    private UUID id;
+
     @Column(name = "name", nullable = false, length = 250)
     private String name;
 

@@ -58,7 +58,7 @@ public class AuthenticationService {
 
         var savedUser = userRepo.save(user);
         if (savedUser != null) {
-            sendConfirmationMail(savedUser, path);
+            sendConfirmationMail(savedUser, savedUser.getConfirmationCode());
         } else {
             throw new Exception("User could not be created.");
         };
@@ -125,10 +125,10 @@ public class AuthenticationService {
         }
     }
 
-    public void sendConfirmationMail(User user, String baseUrl) {
+    public void sendConfirmationMail(User user, String confirmationCode) {
         String subject = "Account Confirmation";
         try {
-            emailService.sendConfirmationMail(user.getEmail(), subject, getMessage(getConfirmationLink()));
+            emailService.sendConfirmationMail(user.getEmail(), subject, getMessage(user.getName(),getConfirmationLink(confirmationCode)));
         } catch (MessagingException e) {
             log.error("Confirmation email could not be sent: {}", e.getMessage());
         }
@@ -139,19 +139,18 @@ public class AuthenticationService {
         return String.valueOf(random.nextInt(900000) + 100000); // 6 digits code
     }
 
-    private String getConfirmationLink() {
-        String code = generateConfirmationCode();
+    private String getConfirmationLink(String code) {
          return this.baseUrl + "/verify/" + code;
     }
 
-    private String getMessage(String confirmationLink) {
+    private String getMessage(String name, String confirmationLink) {
         return "<html>"
                 + "<body style=\"margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;\">"
                 + "<div style=\"max-width: 600px; margin: 0 auto; padding: 20px;\">"
 
                 // Header
                 + "<div style=\"background-color: #007bff; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;\">"
-                + "<h1 style=\"color: #ffffff; margin: 0; font-size: 28px;\">Welcome! 🎉</h1>"
+                + "<h1 style=\"color: #ffffff; margin: 0; font-size: 28px;\">Welcome! "+ name +"</h1>"
                 + "</div>"
 
                 // Main Content
@@ -182,7 +181,7 @@ public class AuthenticationService {
                 // Expiration Warning
                 + "<div style=\"margin-top: 25px; padding: 15px; background-color: #fff3cd; border-radius: 5px; border: 1px solid #ffc107;\">"
                 + "<p style=\"margin: 0; font-size: 14px; color: #856404; text-align: center;\">"
-                + "⏰ <strong>This link will expire in 15 minutes</strong>"
+                + "<strong>This link will expire in 15 minutes</strong>"
                 + "</p>"
                 + "</div>"
 

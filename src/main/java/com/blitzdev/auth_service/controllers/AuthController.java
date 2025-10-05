@@ -45,12 +45,12 @@ public class AuthController {
     @Operation(description = "Endpoint for user verification", responses =
             {@ApiResponse(description = "OK", responseCode = "200")}
     )
-    @PostMapping("/verify/{token}")
+    @GetMapping("/verify/{token}")
     public ResponseEntity<?> verifyUser(@PathVariable("token") String token) {
 
         try {
             authService.verifyUser(token);
-            return ResponseEntity.ok("Confirmation successful.");
+            return ResponseEntity.ok("Email confirmation successful.");
         } catch (Exception e) {
             log.error("Error occurred: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.SC_EXPECTATION_FAILED).body(e.getMessage());
