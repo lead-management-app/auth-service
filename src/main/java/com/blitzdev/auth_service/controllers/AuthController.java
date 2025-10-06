@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Optional;
 
@@ -33,7 +32,7 @@ public class AuthController {
     public ResponseEntity<?> createNewUser(@RequestBody RegisterUserDto dto, HttpServletRequest request) {
 
         try {
-            Optional<UserDto> optUser = authService.signUp(dto, getBaseUrl(request));
+            Optional<UserDto> optUser = authService.signUp(dto);
             return ResponseEntity.ok(optUser.get());
         } catch (Exception e) {
             log.error("Error occurred while creating user: {}", e.getMessage());
@@ -55,13 +54,5 @@ public class AuthController {
             log.error("Error occurred: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.SC_EXPECTATION_FAILED).body(e.getMessage());
         }
-    }
-
-    private String getBaseUrl(HttpServletRequest request) {
-        return ServletUriComponentsBuilder.fromRequestUri(request)
-                .replacePath(request.getRequestURI())
-                .replaceQuery(null)
-                .build()
-                .toString();
     }
 }

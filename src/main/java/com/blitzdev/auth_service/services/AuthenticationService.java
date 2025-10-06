@@ -35,7 +35,7 @@ public class AuthenticationService {
     @Value("${confirmation.base-url}")
     private String baseUrl;
 
-    public Optional<UserDto> signUp(RegisterUserDto dto, String path) throws Exception {
+    public Optional<UserDto> signUp(RegisterUserDto dto) throws Exception {
 
         // does user with this email exist?
         Optional<User> existingUser = userRepo.findByEmail(dto.getEmail());
