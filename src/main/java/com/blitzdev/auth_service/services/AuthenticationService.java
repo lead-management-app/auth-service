@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
@@ -40,7 +41,7 @@ public class AuthenticationService {
         // does user with this email exist?
         Optional<User> existingUser = userRepo.findByEmail(dto.getEmail());
         if (existingUser.isPresent()) {
-            throw new Exception("User with this email already exists");
+            throw new Exception("User with this email already exists.");
         }
 
         // proceed to saving
@@ -131,6 +132,40 @@ public class AuthenticationService {
             emailService.sendConfirmationMail(user.getEmail(), subject, getMessage(user.getName(),getConfirmationLink(confirmationCode)));
         } catch (MessagingException e) {
             log.error("Confirmation email could not be sent: {}", e.getMessage());
+        }
+    }
+
+    public boolean forgotPassword(String email) throws Exception {
+
+        Optional<User> optionalUser = userRepo.findByEmail(email);
+
+        if (optionalUser.isEmpty()) {
+            throw new Exception("Unknown user");
+        }
+
+        User user = optionalUser.get();
+        user.setDeltaPasswordInd(1);
+        user.setEnabledInd(0);
+        user.setConfirmationCode(generateConfirmationCode());
+        user.setConfirmationCodeExpiration(LocalDateTime.now().plusMinutes(15));
+        userRepo.save(user);
+        sendConfirmationMail(user,user.getConfirmationCode());
+
+        return true;
+    }
+
+    public Optional<User> resetPassword(LoginUserDto request) throws Exception {
+
+        Optional<User> optUser = userRepo.findByEmail(request.getEmail());
+
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setDeltaPasswordInd(0);
+
+            return Optional.of(userRepo.save(user));
+        } else {
+            throw new Exception("User with email not found" + request.getEmail());
         }
     }
 
