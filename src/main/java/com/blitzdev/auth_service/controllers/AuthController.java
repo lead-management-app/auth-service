@@ -3,6 +3,7 @@ package com.blitzdev.auth_service.controllers;
 import com.blitzdev.auth_service.dtos.LoginUserDto;
 import com.blitzdev.auth_service.dtos.RegisterUserDto;
 import com.blitzdev.auth_service.dtos.UserDto;
+import com.blitzdev.auth_service.responses.LoginResponse;
 import com.blitzdev.auth_service.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -65,10 +66,10 @@ public class AuthController {
             @ApiResponse(description = "Returns an error message if the login credentials are invalid", responseCode = "417")}
     )
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(
-            @RequestBody LoginUserDto request)
-    {
-        Optional<UserDto> response = (Optional<UserDto>) service.authenticate(request);
+    public ResponseEntity<?> authenticate(@RequestBody LoginUserDto request) throws Exception {
+
+        Optional<LoginResponse> response = service.authenticate(request);
+
         if(response.isEmpty()){
             return ResponseEntity.status(HttpStatus.SC_EXPECTATION_FAILED).body("Invalid Login Credentials");
         }

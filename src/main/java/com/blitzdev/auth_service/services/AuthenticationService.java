@@ -7,6 +7,7 @@ import com.blitzdev.auth_service.dtos.RegisterUserDto;
 import com.blitzdev.auth_service.dtos.UserDto;
 import com.blitzdev.auth_service.mapper.UserMapper;
 import com.blitzdev.auth_service.repo.UserRepository;
+import com.blitzdev.auth_service.responses.LoginResponse;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,7 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
@@ -32,6 +32,7 @@ public class AuthenticationService {
     private final EmailService emailService;
     private final UserMapper userMapper;
     private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
+    private JwtService jwtService;
 
     @Value("${confirmation.base-url}")
     private String baseUrl;
@@ -66,22 +67,30 @@ public class AuthenticationService {
         return Optional.of(userMapper.userToUserDto(savedUser));
     }
 
-    public Optional<?> authenticate(LoginUserDto dto) {
-        Optional<User> user = Optional.ofNullable(userRepo.findByEmail(dto.getEmail())
+    public Optional<LoginResponse> authenticate(LoginUserDto dto) throws Exception {
+        Optional<User> optUser = Optional.of(userRepo.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found")));
 
-        if (!user.get().isEnabled()) {
-            throw new RuntimeException("Account not verified. Please verify your account");
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            if (user.isEnabled()) {
+                throw new RuntimeException("Account not verified. Please verify your account");
+            }
+
+            authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            dto.getEmail(),
+                            dto.getPassword()
+                    )
+            );
+
+            var jwtToken = jwtService.generateToken(optUser.get());
+
+            return Optional.of(LoginResponse.builder()
+                    .changePasswordInd(user.getDeltaPasswordInd())
+                    .token(jwtToken).build());
         }
-
-        authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    dto.getEmail(),
-                    dto.getPassword()
-                )
-        );
-
-        return user;
+        return Optional.empty();
     }
 
     public void verifyUser(String confirmationCode) {
