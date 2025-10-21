@@ -1,3 +1,6 @@
+SELECT 'DATA.SQL LOADED' AS test_message;
+
+
 -- Enable pgcrypto for UUID generation
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
