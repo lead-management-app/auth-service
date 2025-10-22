@@ -2,8 +2,10 @@ package com.blitzdev.auth_service.repo;
 
 import com.blitzdev.auth_service.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,4 +14,18 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmail(String email);
     Optional<User> findByConfirmationCode(String verificationCode);
+
+    @Query("""
+            select u.id
+            from User u
+            where u.demoInd = 1
+            """)
+    List<UUID> findAllDemoUsersId();
+
+    @Query("""
+        select count(u.id)
+        from User u
+        where u.demoInd = 1
+        """)
+    int isDemoUserExists();
 }

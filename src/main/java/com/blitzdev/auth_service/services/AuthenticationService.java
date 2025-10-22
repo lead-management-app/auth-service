@@ -53,6 +53,7 @@ public class AuthenticationService {
                 .confirmationCode(generateConfirmationCode())
                 .confirmationCodeExpiration(LocalDateTime.now().plusMinutes(15))
                 .enabledInd(0)
+                .deltaPasswordInd(1)
                 .userRole(UserRole.USER)
                 .build();
         user.setSignUpDate(LocalDateTime.now());
@@ -73,7 +74,7 @@ public class AuthenticationService {
 
         if (optUser.isPresent()) {
             User user = optUser.get();
-            if (user.isEnabled()) {
+            if (!user.isEnabled()) {
                 throw new RuntimeException("Account not verified. Please verify your account");
             }
 

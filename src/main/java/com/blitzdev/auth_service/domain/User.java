@@ -52,6 +52,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "confirmation_code_expiration")
     private LocalDateTime confirmationCodeExpiration;
 
+    @Column(name = "demo_ind")
+    private int demoInd;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(userRole.name()));
@@ -80,5 +83,9 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.enabledInd == 0;
+    }
+
+    public boolean isDemoEntity() {
+        return this.demoInd == 1;
     }
 }
