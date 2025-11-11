@@ -22,8 +22,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService service;
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Operation(
             summary = "get all the demo users id of the Varata for demo purposes.",
@@ -35,11 +35,14 @@ public class UserController {
     @GetMapping("/demo/usersIds")
     private ResponseEntity<?> getDemoUsersId() {
 
+        logger.info("Fetching demo users.");
         List<UUID> userIds = service.getAllDemoUsersIds();
 
         if (userIds.isEmpty()) {
+            logger.warn("No demo users available.");
             return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("No demo users available.");
         }
+        logger.info("Fetched demo users successfully.");
         return ResponseEntity.ok(userIds);
     }
 }
