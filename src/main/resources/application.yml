@@ -18,7 +18,3 @@ spring:
     activate:
       on-profile: docker
     import: "configserver:http://config-server:9000"
-
-logging:
-  level:
-    org.springframework.cloud.config: DEBUG
