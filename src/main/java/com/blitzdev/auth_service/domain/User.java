@@ -40,7 +40,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "locked", columnDefinition = "int default 0")
     private int lockedInd;
 
-    @Column(name = "enabled", columnDefinition = "int default 1")
+    @Column(name = "enabled", columnDefinition = "int default 0")
     private int enabledInd;
 
     @Column(name = "delta_password")
@@ -82,7 +82,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.enabledInd == 0;
+        return this.enabledInd == 1;
     }
 
     public boolean isDemoEntity() {

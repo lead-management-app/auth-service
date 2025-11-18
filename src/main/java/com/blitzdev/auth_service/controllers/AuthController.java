@@ -68,6 +68,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody LoginUserDto request) throws Exception {
 
+        log.info("Log in request received.");
         Optional<LoginResponse> response = service.authenticate(request);
 
         if(response.isEmpty()){

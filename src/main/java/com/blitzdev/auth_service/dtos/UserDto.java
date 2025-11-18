@@ -26,8 +26,9 @@ public class UserDto {
 
     private int deltaPasswordInd;
 
+    private int demoInd;
+
     private boolean isChangePassword() {
         return this.deltaPasswordInd == 1;
     }
-
 }

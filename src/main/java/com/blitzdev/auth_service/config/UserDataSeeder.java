@@ -31,10 +31,10 @@ public class UserDataSeeder {
                 String password = passwordEncoder.encode("password");
 
                 // Check if Varata already exists
-                if (userRepository.findByEmail("varata@demo.com").isEmpty()) {
+                if (userRepository.findByEmail("varatatech@gmail.com").isEmpty()) {
                     User varata = User.builder()
                             .name("Varata Inc.")
-                            .email("varata@demo.com")
+                            .email("varatatech@gmail.com")
                             .password(password)
                             .userRole(UserRole.SUPER_ADMIN)
                             .lockedInd(0)

@@ -32,7 +32,7 @@ public class AuthenticationService {
     private final EmailService emailService;
     private final UserMapper userMapper;
     private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     @Value("${confirmation.base-url}")
     private String baseUrl;
