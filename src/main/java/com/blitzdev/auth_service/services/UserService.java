@@ -14,6 +14,10 @@ public class UserService {
 
     private final UserRepository userRepo;
 
+//    public List<User> getAllDemo() {
+//        return userRepo.findAllDemoUsers().stream().map();
+//    }
+
     public List<UUID> getAllDemoUsersIds() {
         return userRepo.findAllDemoUsersId();
     }

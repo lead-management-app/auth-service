@@ -45,4 +45,26 @@ public class UserController {
         logger.info("Fetched demo users successfully.");
         return ResponseEntity.ok(userIds);
     }
+
+//    @Operation(
+//            summary = "get all the demo users of the Varata for demo purposes.",
+//            responses = {
+//                    @ApiResponse(description = "Return a list of users of all demo users.", responseCode = "200 Ok"),
+//                    @ApiResponse(description = "Returns an error message if no user is found", responseCode = "404 Not Found.")
+//            }
+//    )
+//    @GetMapping("/demo/users")
+//    private ResponseEntity<?> getDemoUsers() {
+//
+//        logger.info("Fetching demo users.");
+//        List<UUID> users = service.getAllDemoUsersIds();
+//
+//        if (users.isEmpty()) {
+//            logger.warn("No demo users available.");
+//            return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("No demo users available.");
+//        }
+//        logger.info("Fetched demo users successfully.");
+//        return ResponseEntity.ok(users);
+//    }
+
 }

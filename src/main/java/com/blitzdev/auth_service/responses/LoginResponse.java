@@ -11,14 +11,12 @@ import lombok.Setter;
 @Builder
 public class LoginResponse {
 
-    private String name;
     private String emailAddress;
     private String token;
     private int changePasswordInd;
     private boolean changePassword;
 
     public boolean isChangePassword() {
-        changePassword = this.changePasswordInd == 1;
-        return changePassword;
+        return this.changePasswordInd == 1;
     }
 }

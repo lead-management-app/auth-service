@@ -23,6 +23,14 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<UUID> findAllDemoUsersId();
 
     @Query("""
+            select u
+            from User u
+            where u.demoInd = 1
+            """)
+    List<User> findAllDemoUsers();
+
+
+    @Query("""
         select count(u.id)
         from User u
         where u.demoInd = 1
