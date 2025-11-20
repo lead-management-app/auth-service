@@ -25,8 +25,7 @@ public class UserDataSeeder {
     public CommandLineRunner loadDummyUsers() {
         return args -> {
 
-            if (demoEntitiesExist()) {
-
+            if (!demoEntitiesExist()) {
 
                 String password = passwordEncoder.encode("password");
 
@@ -64,14 +63,11 @@ public class UserDataSeeder {
                                 .build());
                     }
                 });
-                System.out.println("✅ Dummy users loaded successfully (Varata + 20 users).");
             }
         };
     }
 
-
     private boolean demoEntitiesExist() {
         return userRepository.isDemoUserExists() == 1;
     }
-
 }

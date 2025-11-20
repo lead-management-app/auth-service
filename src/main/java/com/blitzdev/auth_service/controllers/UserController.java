@@ -39,10 +39,10 @@ public class UserController {
         List<UUID> userIds = service.getAllDemoUsersIds();
 
         if (userIds.isEmpty()) {
-            logger.warn("No demo users available.");
+            logger.warn("No demo user ids available.");
             return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("No demo users available.");
         }
-        logger.info("Fetched demo users successfully.");
+        logger.info("Fetched demo user ids successfully.");
         return ResponseEntity.ok(userIds);
     }
 
