@@ -31,14 +31,21 @@ security:
 
 mail:
   enabled: false
-  host: localhost
-  port: 2525
-  username: dummy
-  password: dummy
+  host: smtp.example.com
+  port: 587
+  username: test@example.com
+  password: testpassword
   protocol: smtp
   properties:
     mail:
       smtp:
-        auth: false
+        auth: true
         starttls:
-          enable: false
+          enable: true
+
+#  spring.mail.username=test@example.com
+#  spring.mail.password=testpassword
+#  spring.mail.host=smtp.example.com
+#  spring.mail.port=587
+#  spring.mail.properties.mail.smtp.auth=true
+#  spring.mail.properties.mail.smtp.starttls.enable=true
