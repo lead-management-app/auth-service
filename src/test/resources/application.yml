@@ -1,7 +1,9 @@
 spring:
+  application:
+    name: lms-gateway-service
   cloud:
-  config:
-    enabled: false
+    config:
+      enabled: false
 
 security:
   jwt:
