@@ -1,18 +1,22 @@
 spring:
   application:
     name: lms-auth-service
+
   cloud:
     config:
       enabled: false
+
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
     username: sa
     password:
+
   jpa:
     hibernate:
       ddl-auto: create-drop
     show-sql: false
+
   h2:
     console:
       enabled: false
@@ -24,3 +28,17 @@ eureka:
 security:
   jwt:
     secret-key: this-is-a-dummy-test-key-that-is-at-least-32-characters-long
+
+mail:
+  enabled: false
+  host: localhost
+  port: 2525
+  username: dummy
+  password: dummy
+  protocol: smtp
+  properties:
+    mail:
+      smtp:
+        auth: false
+        starttls:
+          enable: false
