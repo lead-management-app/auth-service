@@ -28,7 +28,7 @@ pipeline {
                         sh '''
                         TOKEN=$(aws ecr get-login-password --region ${AWS_REGION})
 
-                        ./mvnw clean package com.google.cloud.tools:jib-maven-plugin:build \
+                        ./mvnw clean package -DskipTests com.google.cloud.tools:jib-maven-plugin:build \
                             -Dimage=${REGISTRY_URL}/${SERVICE_NAME}:latest \
                             -Djib.to.auth.username=AWS \
                             -Djib.to.auth.password=$TOKEN
