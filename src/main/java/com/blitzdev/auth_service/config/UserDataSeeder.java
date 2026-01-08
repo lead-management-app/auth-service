@@ -27,7 +27,7 @@ public class UserDataSeeder {
 
             if (!demoEntitiesExist()) {
 
-                String password = passwordEncoder.encode("password");
+                String password = passwordEncoder.encode("varata-1230");
 
                 // Check if Varata already exists
                 if (userRepository.findByEmail("varatatech@gmail.com").isEmpty()) {
@@ -45,7 +45,7 @@ public class UserDataSeeder {
 
                 // Add dummy users if not already present.
                 // 1000 random dummy users.
-                IntStream.rangeClosed(1, 1000).forEach(i -> {
+                IntStream.rangeClosed(1, 50).forEach(i -> {
                     String fullName = faker.name().fullName();
                     String email = faker.internet().emailAddress(fullName.replaceAll("\\s+", ".").toLowerCase());
                     String encodedPassword = passwordEncoder.encode("password" + i);
